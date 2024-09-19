@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { TextField, FormControl, InputLabel, Select, MenuItem, Button, Typography } from '@mui/material';
+import Image from 'next/image';
 
 const BasicInformation = ({
   formData,
@@ -10,19 +11,9 @@ const BasicInformation = ({
   const [gotraOptions, setGotraOptions] = useState([]);
   const [professionsOptions, setProfessionsOptions] = useState([]);
   const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+  const [error, setError] = useState(null);
   
-  // Fetch the array from localStorage when the component mounts
   
-  // useEffect(() => {
-  //   // Replace 'gotraOptions' with the key used to store your array in localStorage
-  //   const storedProfessionOptions = JSON.parse(localStorage.getItem('professions')) || [];
-
-  
-  //   setProfessionsOptions(storedProfessionOptions);
-
-  // }, []);
-
   useEffect(() => {
     const fetchGotras = async () => {
       try {
@@ -62,8 +53,8 @@ const BasicInformation = ({
 
     <TextField
       label="Reference ID"
-      name="referenceId"
-      value={formData.referenceId}
+      name="reference_id"
+      value={formData.reference_id}
       onChange={handleChange}
       fullWidth
       margin="normal"
@@ -102,16 +93,18 @@ const BasicInformation = ({
   </Button>
 
       {/* Show selected file name */}
-      {formData.photo && (
+      {formData.profile && (
         <>
           <Typography variant="body1" sx={{ mt: 2 }}>
             Selected File: {formData.photo}
           </Typography>
 
           {/* Display the image below */}
-          <img
+          <Image
             src={formData.photoUrl}
             alt={formData.photo}
+            width={200} // You can adjust the width and height as needed
+            height={200}
             style={{ marginTop: '10px', maxWidth: '20%', height: 'auto' }}
           />
         </>
@@ -134,8 +127,8 @@ const BasicInformation = ({
 
     <TextField
       label="Father's Name"
-      name="fatherName"
-      value={formData.fatherName}
+      name="father_name"
+      value={formData.father_name}
       onChange={handleChange}
       fullWidth
       margin="normal"
@@ -145,8 +138,8 @@ const BasicInformation = ({
 
     <TextField
       label="Mother's Name"
-      name="motherName"
-      value={formData.motherName}
+      name="mother_name"
+      value={formData.mother_name}
       onChange={handleChange}
       fullWidth
       margin="normal"
@@ -171,9 +164,9 @@ const BasicInformation = ({
     <FormControl fullWidth margin="normal">
       <InputLabel>Marital Status</InputLabel>
       <Select
-        value={formData.maritalStatus}
+        value={formData.marital_status}
         onChange={handleChange}
-        name="maritalStatus"
+        name="marital_status"
         label="Marital Status"
       >
         <MenuItem value="">Select Marital Status</MenuItem>
@@ -182,11 +175,12 @@ const BasicInformation = ({
         <MenuItem value="divorced">Divorced</MenuItem>
       </Select>
     </FormControl>
-    {formData.maritalStatus === 'married' && (
+
+    {formData.marital_status === 'married' && (
       <TextField
         label="Spouse Name"
-        name="spouseName"
-        value={formData.spouseName}
+        name="spouse_name"
+        value={formData.spouse_name}
         onChange={handleChange}
         fullWidth
         margin="normal"
@@ -194,7 +188,7 @@ const BasicInformation = ({
     )}
 
 
-<FormControl fullWidth margin="normal">
+    <FormControl fullWidth margin="normal">
       <InputLabel>Profession</InputLabel>
       <Select
         value={formData.profession}
@@ -223,6 +217,7 @@ const BasicInformation = ({
       margin="normal"
       required
     />
+
      <TextField
       label="Confirt_Password"
       name="confirmPassword"
