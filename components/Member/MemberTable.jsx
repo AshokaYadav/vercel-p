@@ -44,7 +44,7 @@ const StyledHeaderCell = styled('div')({
 });
 
 
-const MemberTable = ({ members, removeMember, editMember, id, open, handleClose, handleOpen }) => {
+const MemberTable = ({ members, removeMember, handleEditClick, id, open, handleClose, handleOpen }) => {
 
   
 
@@ -113,7 +113,7 @@ const MemberTable = ({ members, removeMember, editMember, id, open, handleClose,
     { key: 'district', label: 'District' },
     { key: 'state', label: 'State' },
     { key: 'pincode', label: 'No of Times Donation Made' },
-    { key: 'pincode', label: 'Total Amount Donated' },
+    { key: 'mobile_no', label: 'Total Amount Donated' },
   ];
 
   return (
@@ -141,7 +141,7 @@ const MemberTable = ({ members, removeMember, editMember, id, open, handleClose,
                 <StyledTableCell key={key}>
                   {
 
-                  key === 'pincode' || key === 'pincode' ? (
+                  key === 'pincode' || key === 'mobile_no' ? (
                     <span
                       style={{ cursor: 'pointer', color: '#007bff', fontWeight: 'bold' }}
                       onClick={() => openModal(member)}
@@ -170,7 +170,7 @@ const MemberTable = ({ members, removeMember, editMember, id, open, handleClose,
 
               <StyledTableCell>
                 <Tooltip title="Edit">
-                  <IconButton onClick={() => handleOpen(member)} aria-label="edit">
+                  <IconButton onClick={() => handleEditClick(member)} aria-label="edit">
                     <EditIcon />
                   </IconButton>
                 </Tooltip>

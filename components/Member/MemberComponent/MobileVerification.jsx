@@ -26,8 +26,8 @@ const MobileVerification = ({ formData, handleChange }) => {
     <>
       <TextField
         label="Mobile Number"
-        name="mobile"
-        value={formData.mobile}
+        name="mobile_no"
+        value={formData.mobile_no}
         onChange={handleChange}
         fullWidth
         margin="normal"

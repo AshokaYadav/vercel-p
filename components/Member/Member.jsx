@@ -13,6 +13,42 @@ import ReferenceSearch from './ReferenceSearch';
 import Iconsss from '../Icons/Iconsss';
 
 const Member = () => {
+  const [formData, setFormData] = useState({
+    reference_id: '',
+    gotra: '',
+    profile: null,
+    name: '',
+    father_name: '',
+    mother_name: '',
+    dob: '',
+    marital_status: '',
+    spouse_name: '',
+    mobile_no: '',
+    otp: '',
+    password: '',
+    confirmPassword: '',
+    email: '',
+    address: '',
+    district: '',
+    state: '',
+    pincode: '',
+    profession: '',
+    aadhar_no: '',
+    file: null,
+    id_no: '',
+    file2: null,
+    nominee: '',
+    relationship: '',
+    nominee2: '',
+    relationship2: '',
+    disease: false,
+    diseaseFile: null,
+    rulesAccepted: false,
+    id_type:''
+  });
+
+
+
   const [members, setMembers] = useState([]);
   const [filteredMembers, setFilteredMembers] = useState([]);
   const [filters, setFilters] = useState({
@@ -49,12 +85,6 @@ const Member = () => {
 
 
 
-
-
-
-
-
-
   // Filter and paginate members
   useEffect(() => {
     let result = members.filter(member => {
@@ -77,7 +107,9 @@ const Member = () => {
   // Member addition, edit, delete handlers
 
   const handleEditClick = (member) => {
+    console.log(member);
     setEditData(member); // Set the data of the member you want to edit
+    setFormData(member)
     setOpen(true); // Open the modal
   };
 
@@ -90,6 +122,7 @@ const Member = () => {
   const addMember = newMember => setMembers([...members, newMember]);
   const removeMember = id => window.confirm('Are you sure?') && setMembers(members.filter(member => member.code !== id));
 
+
   return (
     <>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
@@ -97,17 +130,17 @@ const Member = () => {
         <Button variant="contained" onClick={() => setOpen(true)} sx={{ backgroundColor: '#1976d2' }}>Apply for New Donership</Button>
       </Box>
 
-      <MembershipModal1 open={open} handleClose={() => setOpen(false)} initialData={editData} />
+      <MembershipModal1 formData={formData} setFormData={setFormData} open={open} handleClose={() => setOpen(false)} initialData={editData} />
         
 
       <Box borderBottom='1px solid #bcd1c2' display="flex" justifyContent="space-between" alignItems="center" mb={2}></Box>
     
-      <box style={{ border: '1px solid #bcd1c2' }}>
+      <Box style={{ border: '1px solid #bcd1c2' }}>
 
          <Box borderBottom="1px solid #bcd1c2" padding="5px" marginBottom='5px' bgcolor="#007bff" color="white">
           <Typography>Donar List</Typography>
          </Box>
-      </box>
+      </Box>
 
       <Box display="flex"  justifyContent='space-between' >
         <Box>
@@ -130,7 +163,7 @@ const Member = () => {
       <MemberTable 
       members={filteredMembers} 
       removeMember={removeMember} 
-      editMember={handleEditClick} 
+      handleEditClick={handleEditClick} 
       />
 
       <Pagination page={page} pageSize={pageSize} totalPages={totalPages} onPageChange={setPage} onPageSizeChange={newSize => setPageSize(newSize === 'all' ? members.length : newSize)} />

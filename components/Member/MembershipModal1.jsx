@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Button, Box, Typography } from '@mui/material';
 import BasicInformation from './MemberComponent/BasicInformation';
 import EmailVerification from './MemberComponent/EmailVerification';
@@ -8,41 +8,8 @@ import IdentificationDocuments from './MemberComponent/IdentificationDocuments';
 import NomineeDetails from './MemberComponent/NomineeDetails';
 import DiseaseAndRules from './MemberComponent/DiseaseAndRules';
 
-const MembershipModal1 = ({ open, handleClose, initialData }) => {
-  const [formData, setFormData] = useState({
-    reference_id: '',
-    gotra: '',
-    profile: null,
-    name: '',
-    father_name: '',
-    mother_name: '',
-    dob: '',
-    marital_status: '',
-    spouse_name: '',
-    mobile_no: '787783721',
-    otp: '',
-    password: '',
-    confirmPassword: '',
-    email: '',
-    address: '',
-    district: '',
-    state: '',
-    pincode: '',
-    profession: '',
-    aadhar_no: '',
-    file: null,
-    id_no: '',
-    file2: null,
-    nominee: '',
-    relationship: '',
-    nominee2: '',
-    relationship2: '',
-    disease: false,
-    diseaseFile: null,
-    rulesAccepted: false,
-    id_type:"Pan Card"
-  });
-
+const MembershipModal1 = ({formData,setFormData, open, handleClose, initialData }) => {
+  
   const [errorMessage, setErrorMessage] = useState('');
 
   // Handle input change
@@ -94,17 +61,10 @@ const MembershipModal1 = ({ open, handleClose, initialData }) => {
     setFormData({ ...formData, rulesAccepted: e.target.checked });
   };
 
+  useEffect(()=>{
+    console.log(formData)
+  },[formData])
 
-  // Handle submit
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   if (formData.password !== formData.confirmPassword) {
-  //     setErrorMessage('Passwords do not match!');
-  //     return;
-  //   }
-  //   console.log('Applying for membership with:', formData);
-  //   handleClose();
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -112,6 +72,8 @@ const MembershipModal1 = ({ open, handleClose, initialData }) => {
       setErrorMessage('Passwords do not match!');
       return;
     }
+
+    
 
     // Prepare form data for sending to the API
     const formToSubmit = new FormData();

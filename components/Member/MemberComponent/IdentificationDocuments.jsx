@@ -15,11 +15,10 @@ const IdentificationDocuments = ({ formData,handleChange,setFormData}) => {
 
   const documentSelector = (event) => {
     setSelectedDocument(event.target.value);
+    setFormData({...formData,id_type:event.target.value})
   };
 
-  useEffect(()=>{
-    console.log(selectedDocument)
-  },[selectedDocument])
+
 
 
 
@@ -130,6 +129,10 @@ const IdentificationDocuments = ({ formData,handleChange,setFormData}) => {
         </Typography>
       )}
 
+
+
+
+
   <FormControl fullWidth margin="normal">
       <InputLabel>Select Identification Document</InputLabel>
       <Select
@@ -143,6 +146,12 @@ const IdentificationDocuments = ({ formData,handleChange,setFormData}) => {
         <MenuItem value="Driving License">Driving License</MenuItem>
       </Select>
     </FormControl>
+
+
+
+
+
+
 
       <TextField
         label="Voter ID / Driving License / Pan Card No"
