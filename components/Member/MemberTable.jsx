@@ -175,7 +175,7 @@ const MemberTable = ({ members, removeMember, handleEditClick, id, open, handleC
                   </IconButton>
                 </Tooltip>
                 <Tooltip title="Delete">
-                  <IconButton onClick={() => handleDelete(member.code)} aria-label="delete">
+                  <IconButton onClick={() => handleDelete(member.id)} aria-label="delete">
                     <DeleteIcon />
                   </IconButton>
                 </Tooltip>

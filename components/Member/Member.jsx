@@ -42,10 +42,14 @@ const Member = () => {
     nominee2: '',
     relationship2: '',
     disease: false,
-    diseaseFile: null,
+    diseaseFile: '',
     rulesAccepted: false,
     id_type:''
   });
+
+
+
+ 
 
 
 
@@ -54,6 +58,7 @@ const Member = () => {
   const [filters, setFilters] = useState({
     searchQuery: '', role: '', isActive: false, startDate: null, endDate: null, state: '', district: '', referenceId: ''
   });
+
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(100);
   const [totalPages, setTotalPages] = useState(1);
@@ -106,8 +111,78 @@ const Member = () => {
 
   // Member addition, edit, delete handlers
 
+
+
+  const handleClose = () => {
+    // Reset form data
+    setFormData({
+      reference_id: '',
+      gotra: '',
+      profile: null,
+      name: '',
+      father_name: '',
+      mother_name: '',
+      dob: '',
+      marital_status: '',
+      spouse_name: '',
+      mobile_no: '',
+      otp: '',
+      password: '',
+      confirmPassword: '',
+      email: '',
+      address: '',
+      district: '',
+      state: '',
+      pincode: '',
+      profession: '',
+      aadhar_no: '',
+      file: null,
+      id_no: '',
+      file2: null,
+      nominee: '',
+      relationship: '',
+      nominee2: '',
+      relationship2: '',
+      disease: false,
+      diseaseFile: '',
+      rulesAccepted: false,
+      id_type:''
+    });
+
+    // Set open to false
+    setEditData(null)
+    setOpen(false);
+  };
+
+
   const handleEditClick = (member) => {
-    console.log(member);
+     
+    delete member.reference_id;
+    if (Array.isArray(member.nominees) && member.nominees.length > 0) {
+      const detailsObj = member.nominees[0]; // Get the first object from the array
+      
+      // Spread the keys and values from `detailsObj` into `obj`
+      Object.assign(member, detailsObj);
+      
+      // Remove the `details` field from the object
+      delete member.nominees;
+     
+    }else{
+      Object.assign(member, {nominee:'khauf1',relationship:'khauf2',nominee2:'khauf3',relationship2:'khauf4'});
+      
+      // Remove the `details` field from the object
+      delete member.nominees;
+
+    }
+    member['file']=member.aadharUrl;
+    member['file2']=member.id_file;
+    member['profile']=member.profileUrl;
+    member['photo']=member.profileUrl.substring(member.profileUrl.lastIndexOf('/') + 1);
+    member['photoUrl']=`https://agerbandhu-production.up.railway.app${member.profileUrl}`;
+    member['diseaseFileName']=member.diseaseFile.substring(member.diseaseFile.lastIndexOf('/') + 1)
+    console.log("Ashoka maaa");
+    console.log(member)
+    
     setEditData(member); // Set the data of the member you want to edit
     setFormData(member)
     setOpen(true); // Open the modal
@@ -118,9 +193,37 @@ const Member = () => {
 
 
 
-  const handleMemberUpdate = (id, data) => setMembers(members.map(member => member.code === id ? { ...member, ...data } : member));
-  const addMember = newMember => setMembers([...members, newMember]);
-  const removeMember = id => window.confirm('Are you sure?') && setMembers(members.filter(member => member.code !== id));
+
+
+
+
+
+
+
+  const removeMember = async (id) => {
+    const confirmDelete = window.confirm(id);
+    
+    if (confirmDelete) {
+      try {
+        const response = await fetch(`https://agerbandhu-production.up.railway.app/api/member/${id}`, {
+          method: 'DELETE',
+        });
+  
+        if (response.ok) {
+          setMembers(members.filter(member => member.id !== id));
+          alert('Member deleted successfully!');
+        } else {
+          alert('Failed to delete the member. Please try again.');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while deleting the member.');
+      }
+    }
+  };
+  
+
+
 
 
   return (
@@ -130,7 +233,7 @@ const Member = () => {
         <Button variant="contained" onClick={() => setOpen(true)} sx={{ backgroundColor: '#1976d2' }}>Apply for New Donership</Button>
       </Box>
 
-      <MembershipModal1 formData={formData} setFormData={setFormData} open={open} handleClose={() => setOpen(false)} initialData={editData} />
+      <MembershipModal1 formData={formData} setFormData={setFormData} open={open} handleClose={handleClose} initialData={editData} editData={editData}/>
         
 
       <Box borderBottom='1px solid #bcd1c2' display="flex" justifyContent="space-between" alignItems="center" mb={2}></Box>

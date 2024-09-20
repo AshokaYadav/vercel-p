@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { TextField, Button, Typography, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
-const IdentificationDocuments = ({ formData,handleChange,setFormData}) => {
+const IdentificationDocuments = ({ formData,handleChange,setFormData, editData}) => {
 
   const [aadharVerificationMessage, setAadharVerificationMessage] = useState('');
   const [voterIdVerificationMessage, setVoterIdVerificationMessage] = useState('');
@@ -10,15 +10,6 @@ const IdentificationDocuments = ({ formData,handleChange,setFormData}) => {
   // References for the file inputs
   const aadharFileInputRef = useRef(null);
   const voterIdFileInputRef = useRef(null);
-
-  const [selectedDocument, setSelectedDocument] = useState('');
-
-  const documentSelector = (event) => {
-    setSelectedDocument(event.target.value);
-    setFormData({...formData,id_type:event.target.value})
-  };
-
-
 
 
 
@@ -74,7 +65,7 @@ const IdentificationDocuments = ({ formData,handleChange,setFormData}) => {
       const data = new FormData();
       data.append('file', file);
       data.append('number', formData.id_no); 
-      data.append('type_id', selectedDocument); // Change the type if needed
+      data.append('type_id', formData.id_type); // Change the type if needed
 
 
       try {
@@ -128,6 +119,11 @@ const IdentificationDocuments = ({ formData,handleChange,setFormData}) => {
           {aadharVerificationMessage}
         </Typography>
       )}
+       {formData.file && editData && (
+        <Typography color="primary" variant="body2" margin="normal">
+          Verification successful!
+        </Typography>
+      )}
 
 
 
@@ -136,12 +132,13 @@ const IdentificationDocuments = ({ formData,handleChange,setFormData}) => {
   <FormControl fullWidth margin="normal">
       <InputLabel>Select Identification Document</InputLabel>
       <Select
-        value={selectedDocument}
-        onChange={documentSelector}
+        name="id_type"
+        value={formData.id_type}
+        onChange={handleChange}
         label="Identification Document"
       >
         <MenuItem value="">Select Identification Document</MenuItem>
-        <MenuItem value="Pan card">Pan Card</MenuItem>
+        <MenuItem value="PAN Card">Pan Card</MenuItem>
         <MenuItem value="Voter ID">Voter ID</MenuItem>
         <MenuItem value="Driving License">Driving License</MenuItem>
       </Select>
@@ -175,6 +172,11 @@ const IdentificationDocuments = ({ formData,handleChange,setFormData}) => {
       {voterIdVerificationMessage && (
         <Typography color="primary" variant="body2" margin="normal">
           {voterIdVerificationMessage}
+        </Typography>
+      )}
+      {formData.file2 && editData && (
+        <Typography color="primary" variant="body2" margin="normal">
+          Verification successful!
         </Typography>
       )}
     </>

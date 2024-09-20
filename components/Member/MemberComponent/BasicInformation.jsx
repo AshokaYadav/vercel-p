@@ -6,6 +6,7 @@ const BasicInformation = ({
   formData,
   handleChange,
   handleFileChange,
+  editData
 }) => {
   
   const [gotraOptions, setGotraOptions] = useState([]);
@@ -51,14 +52,14 @@ const BasicInformation = ({
 
  return <>
 
-    <TextField
+   {!editData && <TextField
       label="Reference ID"
       name="reference_id"
       value={formData.reference_id}
       onChange={handleChange}
       fullWidth
       margin="normal"
-    />
+    />}
 
 
 
@@ -170,9 +171,9 @@ const BasicInformation = ({
         label="Marital Status"
       >
         <MenuItem value="">Select Marital Status</MenuItem>
-        <MenuItem value="single">Single</MenuItem>
-        <MenuItem value="married">Married</MenuItem>
-        <MenuItem value="divorced">Divorced</MenuItem>
+        <MenuItem value="Single">Single</MenuItem>
+        <MenuItem value="Married">Married</MenuItem>
+        <MenuItem value="Divorced">Divorced</MenuItem>
       </Select>
     </FormControl>
 
@@ -207,7 +208,7 @@ const BasicInformation = ({
     </FormControl>
 
 
-    <TextField
+    {!editData && <TextField
       label="Password"
       name="password"
       type="password"
@@ -216,9 +217,9 @@ const BasicInformation = ({
       fullWidth
       margin="normal"
       required
-    />
+    />}
 
-     <TextField
+     {!editData && <TextField
       label="Confirt_Password"
       name="confirmPassword"
       type="password"
@@ -227,7 +228,7 @@ const BasicInformation = ({
       fullWidth
       margin="normal"
       required
-    />
+    />}
 
 
 

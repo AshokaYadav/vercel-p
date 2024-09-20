@@ -8,12 +8,13 @@ import IdentificationDocuments from './MemberComponent/IdentificationDocuments';
 import NomineeDetails from './MemberComponent/NomineeDetails';
 import DiseaseAndRules from './MemberComponent/DiseaseAndRules';
 
-const MembershipModal1 = ({formData,setFormData, open, handleClose, initialData }) => {
+const MembershipModal1 = ({formData,setFormData, open, handleClose, initialData ,editData}) => {
   
   const [errorMessage, setErrorMessage] = useState('');
 
   // Handle input change
   const handleChange = (e) => {
+    
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
@@ -53,8 +54,16 @@ const MembershipModal1 = ({formData,setFormData, open, handleClose, initialData 
       setFormData({ ...formData, photo: file.name, photoUrl: imageUrl, profile: file });
     }
   };
+
+
+
   const handleDiseaseChange = (e) => {
     setFormData({ ...formData, disease: e.target.checked });
+  };
+
+  const handleDiseasefile = (e) => {
+    const file = e.target.files[0];
+    setFormData({ ...formData, diseaseFile: file,diseaseFileName:file.name });
   };
 
   const handleRulesChange = (e) => {
@@ -68,37 +77,96 @@ const MembershipModal1 = ({formData,setFormData, open, handleClose, initialData 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.password !== formData.confirmPassword) {
-      setErrorMessage('Passwords do not match!');
-      return;
-    }
-
     
-
     // Prepare form data for sending to the API
     const formToSubmit = new FormData();
     Object.keys(formData).forEach((key) => {
       formToSubmit.append(key, formData[key]);
     });
-
+  
     try {
-      const response = await fetch('https://agerbandhu-production.up.railway.app/api/member', {
-        method: 'POST',
-        body: formToSubmit,
-      });
-
+      let response;
+      if (editData) {
+        // Use editData.id for the PUT request
+        response = await fetch(`https://agerbandhu-production.up.railway.app/api/member/${editData.id}`, {
+          method: 'PUT', // Use PUT for updating data
+          body: formToSubmit,
+        });
+      } else {
+        response = await fetch('https://agerbandhu-production.up.railway.app/api/member', {
+          method: 'POST', // Use POST for creating a new member
+          body: formToSubmit,
+        });
+      }
+  
+      if (response.status === 406) {
+        alert('Reference ID not valid');
+      }
+  
       if (!response.ok) {
         throw new Error('Failed to submit the form');
       }
-
+      
       const result = await response.json();
       console.log('Form submitted successfully:', result);
       handleClose(); // Close the modal on successful submission
     } catch (error) {
+      alert(error);
       console.error('Error submitting the form:', error);
       setErrorMessage('Failed to submit the form. Please try again.');
     }
   };
+  
+
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   // Prepare form data for sending to the API
+  //   const formToSubmit = new FormData();
+  //   Object.keys(formData).forEach((key) => {
+  //     formToSubmit.append(key, formData[key]);
+  //   });
+
+
+  //   if(editData){
+
+
+
+  //   }else{
+  //     try {
+  //       const response = await fetch('https://agerbandhu-production.up.railway.app/api/member', {
+  //         method: 'POST',
+  //         body: formToSubmit,
+  //       });
+  
+  //       if(response.status===406){
+  //         alert('reference id not valid');
+  //       }
+  
+  //       if (!response.ok) {
+  //         throw new Error('Failed to submit the form');
+  //       }
+  //       const result = await response.json();
+  //       console.log('Form submitted successfully:', result);
+  //       handleClose(); // Close the modal on successful submission
+  //     } catch (error) {
+  //       alert(error);
+  //       console.error('Error submitting the form:', error);
+  //       setErrorMessage('Failed to submit the form. Please try again.');
+  //     }
+  //   }
+  
+   
+   
+
+
+
+    
+  // };
+
+
+
+
 
   return (
     <Modal component="form" onSubmit={handleSubmit} open={open} onClose={handleClose}>
@@ -119,18 +187,25 @@ const MembershipModal1 = ({formData,setFormData, open, handleClose, initialData 
         <Typography variant="h6" component="h2" sx={{ backgroundColor: '#1976d2', color: 'white', textAlign: 'center' }}>
           {initialData ? 'Edit Data of Member' : 'Apply for New Membership'}
         </Typography>
-
-        <BasicInformation formData={formData} handleChange={handleChange} handleFileChange={handleFileChange} />
+        <BasicInformation formData={formData} handleChange={handleChange} handleFileChange={handleFileChange} editData={editData} />
         <EmailVerification formData={formData} handleChange={handleChange} />
         <MobileVerification formData={formData} handleChange={handleChange} />
-        <AddressInformation formData={formData} handleChange={handleChange} handlePincodeChange={handlePincodeChange} />
-        <IdentificationDocuments formData={formData} handleChange={handleChange} setFormData={setFormData} />
+        <AddressInformation formData={formData} 
+        handleChange={handleChange} 
+        handlePincodeChange={handlePincodeChange}
+        editData={editData}
+         />
+        <IdentificationDocuments formData={formData} handleChange={handleChange}
+         setFormData={setFormData} 
+         editData={editData}
+         />
         <NomineeDetails formData={formData} handleChange={handleChange} />
         <DiseaseAndRules
           formData={formData}
           handleDiseaseChange={handleDiseaseChange}
           handleRulesChange={handleRulesChange}
           setFormData={setFormData}
+          handleDiseasefile={handleDiseasefile}
         />
         <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
           Submit
