@@ -75,8 +75,29 @@ const MembershipModal1 = ({formData,setFormData, open, handleClose, initialData 
   },[formData])
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+console.log("this is in MembershipModal1")
+    console.log(formData);
     
     // Prepare form data for sending to the API
     const formToSubmit = new FormData();
