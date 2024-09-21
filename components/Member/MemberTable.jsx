@@ -146,7 +146,7 @@ const MemberTable = ({ members, removeMember, handleEditClick, id, open, handleC
                       style={{ cursor: 'pointer', color: '#007bff', fontWeight: 'bold' }}
                       onClick={() => openModal(member)}
                     >
-                      {member[key].length || member[key]}
+                      {member[key]?.length || member[key]}
                     </span>
                   ) :key==='profileUrl'? (
                     <Image

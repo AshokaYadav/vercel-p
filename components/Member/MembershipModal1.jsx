@@ -8,7 +8,7 @@ import IdentificationDocuments from './MemberComponent/IdentificationDocuments';
 import NomineeDetails from './MemberComponent/NomineeDetails';
 import DiseaseAndRules from './MemberComponent/DiseaseAndRules';
 
-const MembershipModal1 = ({formData,setFormData, open, handleClose, initialData ,editData}) => {
+const MembershipModal1 = ({formData,setFormData, open, handleClose, initialData ,editData,handleSubmit}) => {
   
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -94,49 +94,7 @@ const MembershipModal1 = ({formData,setFormData, open, handleClose, initialData 
 
 
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-console.log("this is in MembershipModal1")
-    console.log(formData);
-    
-    // Prepare form data for sending to the API
-    const formToSubmit = new FormData();
-    Object.keys(formData).forEach((key) => {
-      formToSubmit.append(key, formData[key]);
-    });
-  
-    try {
-      let response;
-      if (editData) {
-        // Use editData.id for the PUT request
-        response = await fetch(`https://agerbandhu-production.up.railway.app/api/member/${editData.id}`, {
-          method: 'PUT', // Use PUT for updating data
-          body: formToSubmit,
-        });
-      } else {
-        response = await fetch('https://agerbandhu-production.up.railway.app/api/member', {
-          method: 'POST', // Use POST for creating a new member
-          body: formToSubmit,
-        });
-      }
-  
-      if (response.status === 406) {
-        alert('Reference ID not valid');
-      }
-  
-      if (!response.ok) {
-        throw new Error('Failed to submit the form');
-      }
-      
-      const result = await response.json();
-      console.log('Form submitted successfully:', result);
-      handleClose(); // Close the modal on successful submission
-    } catch (error) {
-      alert(error);
-      console.error('Error submitting the form:', error);
-      setErrorMessage('Failed to submit the form. Please try again.');
-    }
-  };
+ 
   
 
 

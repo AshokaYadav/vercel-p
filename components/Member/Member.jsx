@@ -47,17 +47,12 @@ const Member = () => {
     id_type:''
   });
 
-
-
- 
-
-
-
   const [members, setMembers] = useState([]);
   const [filteredMembers, setFilteredMembers] = useState([]);
   const [filters, setFilters] = useState({
     searchQuery: '', role: '', isActive: false, startDate: null, endDate: null, state: '', district: '', referenceId: ''
   });
+
 
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(100);
@@ -109,7 +104,92 @@ const Member = () => {
     setFilteredMembers(result.slice((page - 1) * pageSize, page * pageSize));
   }, [filters, members, page, pageSize]);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   // Member addition, edit, delete handlers
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+console.log("this is in MembershipModal1")
+    console.log(formData);
+    
+    // Prepare form data for sending to the API
+    const formToSubmit = new FormData();
+    Object.keys(formData).forEach((key) => {
+      formToSubmit.append(key, formData[key]);
+    });
+  
+    try {
+      let response;
+      if (editData) {
+        // Use editData.id for the PUT request
+        response = await fetch(`https://agerbandhu-production.up.railway.app/api/member/${editData.id}`, {
+          method: 'PUT', // Use PUT for updating data
+          body: formToSubmit,
+        });
+      } else {
+        response = await fetch('https://agerbandhu-production.up.railway.app/api/member', {
+          method: 'POST', // Use POST for creating a new member
+          body: formToSubmit,
+        });
+      }
+  
+      if (response.status === 406) {
+        alert('Reference ID not valid');
+      }
+  
+      if (!response.ok) {
+        throw new Error('Failed to submit the form');
+      }
+      
+      const result = await response.json();
+       editData ? setMembers([]) :setMembers([...members,{...result}])
+      console.log('Form submitted successfully:', result);
+      handleClose(); // Close the modal on successful submission
+    } catch (error) {
+      alert(error);
+      console.error('Error submitting the form:', error);
+      setErrorMessage('Failed to submit the form. Please try again.');
+    }
+  };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -193,13 +273,6 @@ const Member = () => {
 
 
 
-
-
-
-
-
-
-
   const removeMember = async (id) => {
     const confirmDelete = window.confirm(id);
     
@@ -233,7 +306,15 @@ const Member = () => {
         <Button variant="contained" onClick={() => setOpen(true)} sx={{ backgroundColor: '#1976d2' }}>Apply for New Donership</Button>
       </Box>
 
-      <MembershipModal1 formData={formData} setFormData={setFormData} open={open} handleClose={handleClose} initialData={editData} editData={editData}/>
+      <MembershipModal1 
+      formData={formData} 
+      setFormData={setFormData} 
+      open={open}
+      handleClose={handleClose} 
+      initialData={editData}
+      editData={editData}
+      handleSubmit={handleSubmit}
+        />
         
 
       <Box borderBottom='1px solid #bcd1c2' display="flex" justifyContent="space-between" alignItems="center" mb={2}></Box>
